@@ -1,8 +1,13 @@
 package com.ufu.coin;
 
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import android.widget.EditText;
 
@@ -23,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editText_total = findViewById(R.id.editText_total);
-        layout_coins = findViewById(R.id.layout_coins);
-        label_info = findViewById(R.id.label_info);
+        layout_coin_images = findViewById(R.id.layout_coin_images);
+        label_coins_needed = findViewById(R.id.label_coins_needed);
         label_change = findViewById(R.id.label_change);
+        label_change_example = findViewById(R.id.label_change_example);
 
         editText_total.addTextChangedListener(new TextWatcher(){
             public void onTextChanged(CharSequence s, int start, int before, int count)
@@ -36,19 +42,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private EditText editText_total;
-    private FlexboxLayout layout_coins;
-    private TextView label_info;
+    private FlexboxLayout layout_coin_images;
+    private TextView label_coins_needed;
     private TextView label_change;
+    private TextView label_change_example;
 
-    private double getValue()
-    {
-        String str = editText_total.getText().toString();
-        return Double.parseDouble(str);
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.menu, menu);
     }
+
+    @Override
+    public boolean  onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                startActivity(new Intent(this, About.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+
+
 
     private void drawCoins(int count)
     {
-        layout_coins.removeAllViews();
+        layout_coin_images.removeAllViews();
+
+        // draw at most 10 coins
+        if(count > 10)
+            count = 10;
 
         for(int i=0; i<count; i++)
         {
@@ -59,38 +94,35 @@ public class MainActivity extends AppCompatActivity {
             img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             img.setMaxWidth(screen_w/3);
             img.setAdjustViewBounds(true);
-            //img.setLayoutParams(new LinearLayout.LayoutParams(512, 512));
 
-            layout_coins.addView(img);
+            layout_coin_images.addView(img);
         }
     }
-
 
     private void calculate()
     {
         if(editText_total.getText().length() == 0)
         {
-            layout_coins.removeAllViews();
-            label_info.setText("");
+            layout_coin_images.removeAllViews();
+            label_coins_needed.setText("");
             label_change.setText("");
-            return;
         }
+        else {
+            try
+            {
+                double total =  Double.parseDouble(editText_total.getText().toString());
 
-        try
-        {
-            double total = getValue();
-            int numOfCoins = (int) Math.ceil(total / COIN_VALUE);
-            double change = COIN_VALUE * numOfCoins - total;
+                int numOfCoins = (int) Math.ceil(total / COIN_VALUE);
+                double change = COIN_VALUE * numOfCoins - total;
 
-            drawCoins(numOfCoins);
+                drawCoins(numOfCoins);
 
-            String info_str = "";
-            info_str += numOfCoins + " coin(s)\n";
-            info_str += String.format("%.2f", change) + "€ change\n";
-            label_info.setText(info_str);
-            label_change.setText("Change: " + GetChange.getLeastNumOfCoins(change));
+                Resources res = getResources();
+                label_coins_needed.setText(res.getQuantityString(R.plurals.numOfCoinsNeeded, numOfCoins, numOfCoins));
+                label_change.setText(res.getString(R.string.change, change));
+                label_change_example.setText(res.getString(R.string.change_example,GetChange.getLeastNumOfCoins(change)));
+            } catch (Exception ignored) { }
         }
-        catch (Exception ex) {}
     }
 
     public void onClick_CalcBtn(View v)

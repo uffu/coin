@@ -1,7 +1,8 @@
 package com.ufu.coin;
 
 public class GetChange {
-    public final static double[] CHANGE_VALUES = {2, 1, 0.5, 0.2, 0.1};
+    private final static double[] CHANGE_VALUES = {2, 1, 0.5, 0.2, 0.1};
+    private final static String[] CHANGE_STR = {"2€", "1€", "50cent", "20cent", "1cent"};
 
 
     private static int getOptions_helper(double value)
@@ -30,7 +31,7 @@ public class GetChange {
         {
             int amount = (int)(value / CHANGE_VALUES[i]);
             if(amount > 0)
-                ret += amount + " x " + CHANGE_VALUES[i] + "€, ";
+                ret += amount + " x " + CHANGE_STR[i] + ", ";
             value %= CHANGE_VALUES[i];
         }
 
