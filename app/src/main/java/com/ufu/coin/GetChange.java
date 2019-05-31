@@ -31,7 +31,7 @@ public class GetChange {
         {
             int amount = (int)(value / CHANGE_VALUES[i]);
             if(amount > 0)
-                ret += amount + " x " + CHANGE_STR[i] + ", ";
+                ret += amount + "x " + CHANGE_STR[i] + ", ";
             value %= CHANGE_VALUES[i];
         }
 

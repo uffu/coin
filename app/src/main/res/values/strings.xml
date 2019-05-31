@@ -5,6 +5,7 @@
         <item quantity="one">You need %d coin.</item>
         <item quantity="other">You need %d coins.</item>
     </plurals>
-    <string name="change">%d € change</string>
-    <string name="change_example">Change %s</string>
+    <string name="change">%.2f € change</string>
+    <string name="change_example">Change: %s</string>
+    <string name="total_too_large">Pay with card.</string>
 </resources>

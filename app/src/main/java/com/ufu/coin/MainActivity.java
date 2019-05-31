@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
     {
         layout_coin_images.removeAllViews();
 
-        // draw at most 10 coins
-        if(count > 10)
-            count = 10;
+        // draw at most 9 coins
+        if(count > 9)
+            count = 9;
 
         for(int i=0; i<count; i++)
         {
@@ -99,25 +99,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void clear()
+    {
+        layout_coin_images.removeAllViews();
+        label_coins_needed.setText("");
+        label_change.setText("");
+        label_change_example.setText("");
+    }
     private void calculate()
     {
         if(editText_total.getText().length() == 0)
         {
-            layout_coin_images.removeAllViews();
-            label_coins_needed.setText("");
-            label_change.setText("");
+            clear();
         }
         else {
             try
             {
+                Resources res = getResources();
                 double total =  Double.parseDouble(editText_total.getText().toString());
-
+                if(total>999)
+                {
+                    clear();
+                    label_coins_needed.setText(R.string.total_too_large);
+                    return;
+                }
                 int numOfCoins = (int) Math.ceil(total / COIN_VALUE);
                 double change = COIN_VALUE * numOfCoins - total;
 
                 drawCoins(numOfCoins);
 
-                Resources res = getResources();
+
                 label_coins_needed.setText(res.getQuantityString(R.plurals.numOfCoinsNeeded, numOfCoins, numOfCoins));
                 label_change.setText(res.getString(R.string.change, change));
                 label_change_example.setText(res.getString(R.string.change_example,GetChange.getLeastNumOfCoins(change)));
