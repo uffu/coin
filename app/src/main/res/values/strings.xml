@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">SCA (Simple Coin Assessment)</string>
-    <string name="about">Idea by\nRoberto Picco\n\n\nApp by\nUfuk Buyuksahin</string>
+    <string name="about">Idea by\nRoberto Picco\n\nApp by\nUfuk Buyuksahin</string>
     <plurals name="numOfCoinsNeeded">
         <item quantity="one">You need %d coin.</item>
         <item quantity="other">You need %d coins.</item>
     </plurals>
+    <string name="how_much_hint">How much?</string>
+    <string name="calculate_btn">Calculate!!</string>
     <string name="change">%.2f € change</string>
-    <string name="change_example">Change: %s</string>
+    <string name="change_example">Least # of coins: %s\n\nThere are %d ways to get it:\n%s</string>
     <string name="total_too_large">Pay with card.</string>
 </resources>

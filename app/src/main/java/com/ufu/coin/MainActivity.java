@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.EditText;
-
 import android.widget.ImageView;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -18,9 +17,12 @@ import android.widget.TextView;
 import android.text.TextWatcher;
 import android.text.Editable;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class MainActivity extends AppCompatActivity {
 
-    private final double COIN_VALUE = 4.4;
+    private final BigDecimal COIN_VALUE = new BigDecimal("4.40");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
     private void drawCoins(int count)
     {
         layout_coin_images.removeAllViews();
@@ -116,22 +115,25 @@ public class MainActivity extends AppCompatActivity {
             try
             {
                 Resources res = getResources();
-                double total =  Double.parseDouble(editText_total.getText().toString());
-                if(total>999)
+                BigDecimal total = new BigDecimal(editText_total.getText().toString());
+                if(total.compareTo(BigDecimal.valueOf(999))>0)
                 {
                     clear();
                     label_coins_needed.setText(R.string.total_too_large);
                     return;
                 }
-                int numOfCoins = (int) Math.ceil(total / COIN_VALUE);
-                double change = COIN_VALUE * numOfCoins - total;
+                int numOfCoins = total.divide(COIN_VALUE,0, RoundingMode.CEILING).intValue();
+                BigDecimal change = COIN_VALUE.multiply(BigDecimal.valueOf(numOfCoins)).subtract(total);
 
                 drawCoins(numOfCoins);
 
-
                 label_coins_needed.setText(res.getQuantityString(R.plurals.numOfCoinsNeeded, numOfCoins, numOfCoins));
                 label_change.setText(res.getString(R.string.change, change));
-                label_change_example.setText(res.getString(R.string.change_example,GetChange.getLeastNumOfCoins(change)));
+                label_change_example.setText(res.getString(R.string.change_example,
+                        GetChange.getLeastNumOfCoins(change),
+                        GetChange.getNumOfOptions(change),
+                        GetChange.getAllOptions_str(change)));
+
             } catch (Exception ignored) { }
         }
     }
