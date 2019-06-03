@@ -80,10 +80,6 @@ public class MainActivity extends AppCompatActivity {
     {
         layout_coin_images.removeAllViews();
 
-        // draw at most 9 coins
-        if(count > 9)
-            count = 9;
-
         for(int i=0; i<count; i++)
         {
             int screen_w = getResources().getDisplayMetrics().widthPixels;
@@ -95,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
             img.setAdjustViewBounds(true);
 
             layout_coin_images.addView(img);
+
+            if(i>=7)
+            {
+                TextView t = new TextView(this);
+                t.setText("...");
+                t.setTextSize(64);
+                layout_coin_images.addView(t);
+                break;
+            }
         }
     }
 

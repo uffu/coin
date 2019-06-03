@@ -15,11 +15,11 @@ class GetChange
             new BigDecimal("0.1")};
     private final static String[] CHANGE_STR = {"2€", "1€", "50¢", "20¢", "10¢"};
 
-    private final static int MAX_ALL_OPTIONS_SIZE = 100;
+    private final static int MAX_ALL_OPTIONS_SIZE = 1000;
 
     private static int getNumOfOptions_helper(BigDecimal value, int index)
     {
-        if(value.compareTo(BigDecimal.ZERO) == 0)
+        if(value.compareTo(CHANGE_VALUES[CHANGE_VALUES.length-1]) < 0)
             return 1;
         int ret = 0;
         for(int i=index; i<CHANGE_VALUES.length; i++)
@@ -36,7 +36,7 @@ class GetChange
 
     private static void getAllOptions_helper(BigDecimal value, int index, int[] amount, ArrayList<int[]> amounts)
     {
-        if(value.compareTo(BigDecimal.ZERO) == 0)
+        if(value.compareTo(CHANGE_VALUES[CHANGE_VALUES.length-1]) < 0)
         {
             amounts.add(amount);
             return;
